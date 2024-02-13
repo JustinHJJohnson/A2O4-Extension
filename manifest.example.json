@@ -1,0 +1,33 @@
+{
+    "manifest_version": 2,
+    "name": "AO3 API Download",
+    "version": "1",
+    "description": "Adds a download button to AO3 that downloads works and series using a local api",
+    "icons": {
+        "48": "icons/Logo_Archive_of_Our_Own.svg",
+        "96": "icons/Logo_Archive_of_Our_Own.svg"
+    },
+    "permissions": [
+        "webRequest",
+        "storage",
+        "*://127.0.0.1/*"
+    ],     
+    "browser_action": {
+        "default_icon": "icons/Logo_Archive_of_Our_Own.svg",
+        "default_title": "AO3 API Download",
+        "default_popup": "popup/AO3.html"
+    },
+    "browser_specific_settings": {
+        "gecko": {
+            "id": "example@example.github.com"
+        }
+    },
+    "content_scripts": [
+        {
+            "matches": ["*://archiveofourown.org/works/*", "*://archiveofourown.org/series/*"],
+            "js": ["download.js"],
+            "css": ["page_css.css"]
+        }
+    ]
+}
+  
