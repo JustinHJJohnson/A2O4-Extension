@@ -1,6 +1,6 @@
 const form = document.querySelector("#address");
 
-async function sendData() {
+async function saveConnectionDetails() {
   const formData = new FormData(form);
 
   await browser.storage.local.set({
@@ -12,7 +12,7 @@ async function sendData() {
 // Take over form submission
 form.addEventListener("submit", (event) => {
   event.preventDefault();
-  sendData();
+  saveConnectionDetails();
 });
 
 async function restoreConnectionDetails() {

@@ -1,12 +1,35 @@
-async function downloadUrl(AO3Url) {
-    let res = await browser.storage.local.get();
-    serverIp = `${res.AO3_ip}:${res.AO3_port}`
-    
+function showErrorDropdown(error) {
     download_button = document.getElementById("A2O4ButtonText")
     info_dropdown = document.getElementById("A2O4dropdown")
     info_dropdown_text = document.getElementById("A2O4dropdownInfo")
+
+    download_button.text = "Failed"
+    info_dropdown_text.innerText = error
+    info_dropdown.classList.remove("hidden")
+}
+
+async function downloadUrl(AO3Url) {
+    const res = await browser.storage.local.get();
+    const serverIp = `${res.AO3_ip}:${res.AO3_port}`
+
+    if (res.AO3_ip == '' || res.AO3_ip == undefined) {
+        showErrorDropdown("Server IP is not set")
+        return
+    }
+    else if (res.AO3_port == '' || res.AO3_port == undefined) {
+        showErrorDropdown("Server port is not set")
+        return
+    }
+    else if (!/^\d+$/.test(res.AO3_port)) {
+        showErrorDropdown("Port entered is not valid")
+        return
+    }
     
+    const download_button = document.getElementById("A2O4ButtonText")
     download_button.text = "Downloading"
+
+    const info_dropdown = document.getElementById("A2O4dropdown")
+    info_dropdown.classList.add("hidden")
     
     let response = {}
     const testing = false
@@ -24,7 +47,7 @@ async function downloadUrl(AO3Url) {
             console.log(await response);
         } catch (e) {
             console.error(e);
-            download_button.text = "Failed"
+            showErrorDropdown(e)
             return
         }
     } else {
@@ -36,10 +59,7 @@ async function downloadUrl(AO3Url) {
 
     switch (response.status) {
         case 503:
-            response_text = await response.text()
-            download_button.text = "Failed"
-            info_dropdown_text.innerText = response_text
-            info_dropdown.classList.remove("hidden")
+            showErrorDropdown(await response.text())
             break;
         default:
             download_button.text = "Success"
@@ -59,7 +79,7 @@ if (!document.URL.includes("search")) {
 
     removeElementsByClass("A2O4Button")
 
-    navigationButtons = document.getElementsByClassName("work navigation actions")[0]
+    const navigationButtons = document.getElementsByClassName("work navigation actions")[0]
     const newButton = document.createElement("li")
     const newButtonText = document.createElement("a")
     const newButtonDropdown = document.createElement("ul")
