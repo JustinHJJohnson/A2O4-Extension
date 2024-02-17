@@ -41,7 +41,7 @@ async function downloadUrl(AO3Url) {
 
 if (!document.URL.includes("search")) {
     console.log("Adding API download button")
-    navigationButtons = document.getElementsByClassName("navigation actions")[2]
+    navigationButtons = document.getElementsByClassName("work navigation actions")[0]
     const newButton = document.createElement("li")
     const newButtonText = document.createElement("a")
     const newButtonDropdown = document.createElement("ul")
