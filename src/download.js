@@ -1,10 +1,10 @@
-function showErrorDropdown(error) {
+function showDropdown(buttonText, message) {
     download_button = document.getElementById("A2O4ButtonText")
     info_dropdown = document.getElementById("A2O4dropdown")
     info_dropdown_text = document.getElementById("A2O4dropdownInfo")
 
-    download_button.text = "Failed"
-    info_dropdown_text.innerText = error
+    download_button.text = buttonText
+    info_dropdown_text.innerText = message
     info_dropdown.classList.remove("hidden")
 }
 
@@ -13,15 +13,15 @@ async function downloadUrl(AO3Url) {
     const serverIp = `${res.AO3_ip}:${res.AO3_port}`
 
     if (res.AO3_ip == '' || res.AO3_ip == undefined) {
-        showErrorDropdown("Server IP is not set")
+        showDropdown("Error", "Server IP is not set")
         return
     }
     else if (res.AO3_port == '' || res.AO3_port == undefined) {
-        showErrorDropdown("Server port is not set")
+        showDropdown("Error", "Server port is not set")
         return
     }
     else if (!/^\d+$/.test(res.AO3_port)) {
-        showErrorDropdown("Port entered is not valid")
+        showDropdown("Error", "Port entered is not valid")
         return
     }
     
@@ -46,8 +46,17 @@ async function downloadUrl(AO3Url) {
             });
             console.log(await response);
         } catch (e) {
-            console.error(e);
-            showErrorDropdown(e)
+            console.error(e)
+
+            if (e instanceof TypeError) {
+                if (e.message.startsWith("NetworkError")) {
+                    showDropdown("Error", "Cannot connect to server, check ip and server state")
+                } else {
+                    showDropdown("Error", e)
+                }
+            } else {
+                showDropdown("Error", e)
+            }
             return
         }
     } else {
@@ -59,10 +68,10 @@ async function downloadUrl(AO3Url) {
 
     switch (response.status) {
         case 503:
-            showErrorDropdown(await response.text())
+            showDropdown("Failed", await response.text())
             break;
         default:
-            download_button.text = "Success"
+            showDropdown("Success", await response.text())
             break;
     }
 }
