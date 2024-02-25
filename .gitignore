@@ -1,3 +1,4 @@
 *.xpi
 manifest.json
 web-ext-artifacts/
+node_modules

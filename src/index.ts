@@ -1,14 +1,18 @@
-function showDropdown(buttonText, message) {
-    download_button = document.getElementById("A2O4ButtonText")
-    info_dropdown = document.getElementById("A2O4dropdown")
-    info_dropdown_text = document.getElementById("A2O4dropdownInfo")
+import ErrorService from "./ErrorService";
+import browser from 'webextension-polyfill';
 
-    download_button.text = buttonText
-    info_dropdown_text.innerText = message
-    info_dropdown.classList.remove("hidden")
+function showDropdown(buttonText: string, message: string) {
+    const download_button = document.getElementById("A2O4ButtonText") as HTMLButtonElement | null
+    const info_dropdown = document.getElementById("A2O4dropdown")
+    const info_dropdown_text = document.getElementById("A2O4dropdownInfo")
+
+    download_button ? download_button.innerText = buttonText : undefined
+    info_dropdown_text ? info_dropdown_text.innerText = message : undefined
+    info_dropdown?.classList.remove("hidden")
 }
 
-async function downloadUrl(AO3Url) {
+async function downloadUrl(AO3Url: string) {
+
     const res = await browser.storage.local.get();
     const serverIp = `${res.AO3_ip}:${res.AO3_port}`
 
@@ -25,13 +29,13 @@ async function downloadUrl(AO3Url) {
         return
     }
     
-    const download_button = document.getElementById("A2O4ButtonText")
-    download_button.text = "Downloading"
+    const download_button = document.getElementById("A2O4ButtonText") as HTMLButtonElement | null
+    download_button ? download_button.innerText = "Downloading" : undefined
 
     const info_dropdown = document.getElementById("A2O4dropdown")
-    info_dropdown.classList.add("hidden")
+    info_dropdown?.classList.add("hidden")
     
-    let response = {}
+    let response: Response
     const testing = false
     if (!testing) {
         try {
@@ -47,23 +51,22 @@ async function downloadUrl(AO3Url) {
             console.log(await response);
         } catch (e) {
             console.error(e)
+            const errorService = new ErrorService
+            const error: string = errorService.handle(e)
 
             if (e instanceof TypeError) {
                 if (e.message.startsWith("NetworkError")) {
                     showDropdown("Error", "Cannot connect to server, check ip and server state")
                 } else {
-                    showDropdown("Error", e)
+                    showDropdown("Error", error)
                 }
             } else {
-                showDropdown("Error", e)
+                showDropdown("Error",  error)
             }
             return
         }
     } else {
-        response.status = 503
-        response.text = async () => {
-            return "test error message"
-        }
+        response = new Response(null, {status: 503, statusText: "test error message"})
     }
 
     switch (response.status) {
@@ -76,10 +79,10 @@ async function downloadUrl(AO3Url) {
     }
 }
 
-function removeElementsByClass(className){
+function removeElementsByClass(className: string){
     const elements = document.getElementsByClassName(className);
-    while(elements.length > 0){
-        elements[0].parentNode.removeChild(elements[0]);
+    while(elements.length > 0) {
+        elements[0].parentNode?.removeChild(elements[0]);
     }
 }
 

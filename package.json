@@ -1,0 +1,8 @@
+{
+  "type": "module",
+  "devDependencies": {
+    "@types/node": "^20.11.20",
+    "@types/webextension-polyfill": "^0.10.7",
+    "webextension-polyfill": "^0.10.0"
+  }
+}
