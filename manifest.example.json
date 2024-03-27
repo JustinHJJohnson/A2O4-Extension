@@ -1,6 +1,6 @@
 {
     "manifest_version": 2,
-    "name": "AO3 API Download",
+    "name": "A2O4 Download",
     "version": "1",
     "description": "Adds a download button to AO3 that downloads works and series using a local api",
     "icons": {
@@ -14,8 +14,8 @@
     ],     
     "browser_action": {
         "default_icon": "icons/Logo_Archive_of_Our_Own.svg",
-        "default_title": "AO3 API Download",
-        "default_popup": "popup/AO3.html"
+        "default_title": "A2O4 Download",
+        "default_popup": "src/popup/AO3.html"
     },
     "browser_specific_settings": {
         "gecko": {
@@ -25,8 +25,8 @@
     "content_scripts": [
         {
             "matches": ["*://archiveofourown.org/works/*", "*://archiveofourown.org/series/*"],
-            "js": ["download.js"],
-            "css": ["page_css.css"]
+            "js": ["src/download.js"],
+            "css": ["src/page_css.css"]
         }
     ]
 }
