@@ -88,7 +88,7 @@ if (!document.URL.includes("search")) {
 
     removeElementsByClass("A2O4Button")
 
-    const navigationButtons = document.getElementsByClassName("work navigation actions")[0]
+    const navigationButtons = document.getElementsByClassName("work navigation actions")[0] ?? document.getElementsByClassName("navigation actions")[2]
     const newButton = document.createElement("li")
     const newButtonText = document.createElement("a")
     const newButtonDropdown = document.createElement("ul")
