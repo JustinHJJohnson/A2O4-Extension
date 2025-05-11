@@ -5,7 +5,8 @@ async function saveConnectionDetails() {
 
   await browser.storage.local.set({
     AO3_ip: formData.get("ip"),
-    AO3_port: formData.get("port")
+    AO3_port: formData.get("port"),
+    AO3_fandom: formData.get("fandom")
   });
 }
 
@@ -19,6 +20,7 @@ async function restoreConnectionDetails() {
     let res = await browser.storage.local.get();
     document.querySelector("#ip").value = res.AO3_ip || ''
     document.querySelector("#port").value = res.AO3_port || ''
+    document.querySelector("#fandom").value = res.AO3_fandom || ''
 }
 
 document.addEventListener('DOMContentLoaded', restoreConnectionDetails);
